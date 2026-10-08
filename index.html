@@ -56,6 +56,7 @@ input[type=text]{width:100%;font:inherit;font-size:22px;padding:12px;border:3px 
 .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--card)}
 .dot.on{background:var(--good)}
   .daily{background:var(--sun);color:#1d2b53}.daily .hint{color:#1d2b53}.daily .dot{background:#fff}.sec{font-family:'Fredoka',sans-serif;font-size:20px;margin:22px 0 10px}
+.levels{display:flex;gap:8px;margin-bottom:14px}.lv{flex:1;font-family:'Fredoka',sans-serif;font-size:17px;font-weight:600;padding:8px 0;border:3px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);cursor:pointer}.lv.on{background:var(--accent);color:#fff}.spk{border:2px solid var(--line);background:var(--sun);border-radius:99px;font-size:16px;padding:2px 10px;cursor:pointer;margin-left:6px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -68,7 +69,75 @@ input[type=text]{width:100%;font:inherit;font-size:22px;padding:12px;border:3px 
   <div id="app"></div>
 </main>
 <script>
-const WORDS=[
+const P=t=>t.trim().split('\n').map(l=>{const x=l.split('|');return[x[0],{n:'noun',v:'verb',a:'adjective'}[x[1]],x[2],x[3]]});
+const BANK={K2:P(`friend|n|A person you know well and like.|My friend and I play at recess.
+family|n|A group of people who are related, like parents and children.|My family eats dinner together.
+animal|n|A living thing that is not a plant.|Every animal at the farm was fed.
+window|n|An opening in a wall that lets in light.|I looked out the window at the rain.
+garden|n|A place where flowers or vegetables grow.|We planted seeds in the garden.
+school|n|A place where children go to learn.|I walk to school with my sister.
+rabbit|n|A small furry animal with long ears.|The rabbit hopped across the grass.
+rainbow|n|Colored arcs in the sky after rain.|We saw a rainbow after the storm.
+pencil|n|A thin tool for writing with a graphite tip.|Please sharpen your pencil.
+butterfly|n|An insect with large, colorful wings.|A butterfly landed on the flower.
+bridge|n|A structure that lets you cross over water or a road.|The car drove over the bridge.
+shadow|n|A dark shape made when something blocks the light.|My shadow follows me on sunny days.
+jump|v|To push yourself off the ground into the air.|Can you jump over the puddle?
+listen|v|To pay attention to a sound.|Listen to the birds singing.
+remember|v|To keep something in your mind.|I remember my phone number.
+share|v|To let someone else use or have part of something.|Please share your crayons.
+climb|v|To go up something using your hands and feet.|We climb the hill every morning.
+whisper|v|To speak very softly.|Whisper in the library.
+wonder|v|To think about something with curiosity.|I wonder why the sky is blue.
+borrow|v|To take something and give it back later.|May I borrow your eraser?
+carry|v|To hold something and take it from place to place.|Dad will carry the heavy bags.
+laugh|v|To make happy sounds when something is funny.|The joke made us laugh.
+follow|v|To go after someone or something.|The ducklings follow their mother.
+happy|a|Feeling glad and joyful.|I am happy when the sun shines.
+quiet|a|Making very little noise.|The baby is quiet now.
+bright|a|Giving off a lot of light.|The bright moon lit the yard.
+gentle|a|Soft and kind, not rough.|Be gentle with the kitten.
+tiny|a|Very, very small.|A tiny ant crawled on my hand.
+brave|a|Ready to face danger or fear.|The brave firefighter saved the cat.
+sleepy|a|Ready to go to sleep.|The sleepy puppy yawned.
+hungry|a|Wanting to eat food.|I was hungry after soccer.
+thirsty|a|Wanting to drink something.|The thirsty dog drank all its water.
+empty|a|Having nothing inside.|The box was empty.
+round|a|Shaped like a circle or ball.|A ball is round.
+different|a|Not the same as something else.|My shoes are different colors.
+special|a|Better or more important than usual.|Today is a special day.`),G35:P(`neighborhood|n|The area around where you live and the people in it.|Our neighborhood has a small park.
+mystery|n|Something that is hard to explain or understand.|The missing sock is still a mystery.
+library|n|A place where books are kept for people to borrow.|I returned the book to the library.
+adventure|n|An exciting or unusual experience.|Our camping trip was a real adventure.
+island|n|Land completely surrounded by water.|We took a boat to the island.
+treasure|n|A collection of valuable things.|The pirates buried their treasure.
+invention|n|A new thing that someone creates.|The light bulb was a great invention.
+community|n|A group of people who live in the same place.|The whole community helped clean the beach.
+century|n|A period of one hundred years.|That house is over a century old.
+horizon|n|The line where the sky seems to meet the earth.|The sun sank below the horizon.
+temperature|n|How hot or cold something is.|The temperature dropped overnight.
+journey|n|A trip from one place to another.|The journey to the mountains took all day.
+discover|v|To find or learn something for the first time.|Scientists discover new insects every year.
+imagine|v|To form a picture of something in your mind.|Imagine a world without cars.
+improve|v|To get better or make something better.|I want to improve my handwriting.
+balance|v|To keep steady without falling.|She can balance on one foot.
+protect|v|To keep safe from harm.|A helmet will protect your head.
+believe|v|To think that something is true.|I believe you told the truth.
+announce|v|To tell something to many people.|The principal will announce the winners.
+complain|v|To say that you are unhappy about something.|Please do not complain about the rain.
+explore|v|To travel through a place to learn about it.|We will explore the cave tomorrow.
+measure|v|To find the size or amount of something.|Measure the table with a ruler.
+scatter|v|To throw or spread things in many directions.|Wind will scatter the leaves.
+nervous|a|Worried or a little afraid.|I felt nervous before the spelling bee.
+ordinary|a|Normal, not special or unusual.|It was an ordinary Tuesday.
+familiar|a|Known to you; easy to recognize.|That song sounds familiar.
+delicious|a|Tasting or smelling very good.|The soup was delicious.
+dangerous|a|Likely to cause harm.|The icy road was dangerous.
+comfortable|a|Giving a feeling of ease and rest.|This chair is very comfortable.
+peculiar|a|Strange or odd.|A peculiar smell came from the attic.
+graceful|a|Moving in a smooth and beautiful way.|The graceful dancer spun across the stage.
+eager|a|Wanting very much to do something.|The eager students raised their hands.
+ferocious|a|Fierce and wild.|The ferocious lion roared loudly.`),G68:[
 ["abundant","adjective","Existing in large amounts; plentiful.","Fruit was abundant in the orchard this fall."],
 ["reluctant","adjective","Unwilling and hesitant to do something.","Maya was reluctant to jump into the cold lake."],
 ["generous","adjective","Willing to give more than is expected.","He was generous and shared his lunch with everyone."],
@@ -94,37 +163,99 @@ const WORDS=[
 ["voyage","noun","A long journey, especially by sea or in space.","The voyage across the ocean took two weeks."],
 ["tradition","noun","A custom passed down over many years.","Baking bread together is a family tradition."],
 ["bewildered","adjective","Very confused; puzzled.","The bewildered tourist studied the subway map."],
-["eloquent","adjective","Able to speak or write clearly and powerfully.","Her eloquent speech moved the crowd."]
-];
+["eloquent","adjective","Able to speak or write clearly and powerfully.","Her eloquent speech moved the crowd."]].concat(P(`ecosystem|n|A community of living things and their environment.|A pond is a small ecosystem.
+hypothesis|n|An educated guess that can be tested.|Her hypothesis was that plants grow faster in light.
+democracy|n|A system where people choose their leaders by voting.|In a democracy, citizens vote in elections.
+symmetry|n|Balance in which two halves match each other.|A butterfly's wings show symmetry.
+metaphor|n|A phrase that describes something by calling it something else.|Calling time a thief is a metaphor.
+ambition|n|A strong desire to achieve something.|Her ambition is to become a surgeon.
+catastrophe|n|A sudden disaster that causes great damage.|The flood was a catastrophe for the town.
+perspective|n|A point of view or way of looking at things.|Try to see it from your friend's perspective.
+persuade|v|To convince someone to do or believe something.|I tried to persuade my parents to adopt a dog.
+contradict|v|To say the opposite of what someone else has said.|The new facts contradict his story.
+assemble|v|To put parts together or gather a group.|We will assemble the model after lunch.
+illustrate|v|To explain with pictures or examples.|Diagrams illustrate how the heart works.
+summarize|v|To give the main points in a short form.|Summarize the chapter in three sentences.
+negotiate|v|To talk with others to reach an agreement.|The two sides will negotiate a deal.
+interpret|v|To explain the meaning of something.|How do you interpret this poem?
+ambiguous|a|Having more than one possible meaning.|The ambiguous sign confused drivers.
+sufficient|a|As much as is needed; enough.|Five dollars is sufficient for the bus.
+hazardous|a|Dangerous or risky.|Spilled oil makes the floor hazardous.
+immense|a|Extremely large.|An immense crowd filled the stadium.
+rigorous|a|Very strict, careful, and thorough.|The team follows a rigorous training plan.
+tangible|a|Able to be touched or clearly seen as real.|The trophy was tangible proof of their effort.
+reliable|a|Able to be trusted to do what is expected.|She is a reliable friend.`)),G912:P(`bureaucracy|n|A system of government run by many officials and strict rules.|Getting the permit meant wading through bureaucracy.
+conscience|n|Your inner sense of right and wrong.|His conscience would not let him keep the wallet.
+entrepreneur|n|A person who starts and runs a business.|The young entrepreneur launched her own bakery.
+hierarchy|n|A system that ranks people or things by importance.|The army has a strict hierarchy of ranks.
+silhouette|n|The dark outline of a shape against a light background.|We saw the silhouette of a tree at sunset.
+camaraderie|n|Friendship and trust among people who spend time together.|The team's camaraderie grew over the long season.
+surveillance|n|Close watching of a person or place.|Cameras provided surveillance of the parking lot.
+rhythm|n|A regular, repeating pattern of sound or movement.|The drummer kept a steady rhythm.
+mnemonic|n|A trick that helps you remember something.|Use a mnemonic to remember the planets.
+onomatopoeia|n|A word that imitates the sound it names.|Buzz is an example of onomatopoeia.
+euphemism|n|A mild word used in place of a harsher one.|Passed away is a euphemism for died.
+paradigm|n|A typical model or pattern of something.|The discovery shifted the scientific paradigm.
+pseudonym|n|A made-up name used by an author.|She wrote mysteries under a pseudonym.
+labyrinth|n|A complicated maze.|We got lost in the labyrinth of tunnels.
+exacerbate|v|To make a problem worse.|Scratching will exacerbate the rash.
+mitigate|v|To make something less severe.|Trees mitigate the heat in cities.
+perpetuate|v|To cause something to continue.|Rumors only perpetuate misunderstandings.
+circumvent|v|To find a way around a rule or problem.|He tried to circumvent the security system.
+substantiate|v|To support a claim with proof.|Can you substantiate that statement with data?
+juxtapose|v|To place things side by side to compare them.|The artist likes to juxtapose old and new styles.
+alleviate|v|To make pain or trouble easier to bear.|Medicine can alleviate the pain.
+scrutinize|v|To examine very closely.|The judge will scrutinize every detail.
+vindicate|v|To clear someone of blame.|The video evidence will vindicate her.
+procrastinate|v|To put off doing something until later.|Do not procrastinate on your essay.
+ubiquitous|a|Seeming to be everywhere at once.|Smartphones are ubiquitous today.
+ephemeral|a|Lasting for a very short time.|The beauty of a snowflake is ephemeral.
+meticulous|a|Showing great attention to detail.|The meticulous clockmaker checked every gear.
+pragmatic|a|Dealing with things in a practical way.|She took a pragmatic approach to the budget.
+ostentatious|a|Showy in a way meant to impress.|The ostentatious mansion had gold fountains.
+belligerent|a|Hostile and eager to fight.|The belligerent customer shouted at the staff.
+nonchalant|a|Calm and unworried.|He seemed nonchalant before the big exam.
+clandestine|a|Done in secret.|They held a clandestine meeting at midnight.
+inevitable|a|Certain to happen.|Rain seemed inevitable under those dark clouds.
+resilient|a|Able to recover quickly from trouble.|Resilient children bounce back from setbacks.
+pretentious|a|Trying to seem more important than you are.|The pretentious menu used needlessly fancy words.`)};
+const ALL=Object.values(BANK).flat();
+const LV=[['K2','K–2'],['G35','3–5'],['G68','6–8'],['G912','9–12']];
 const $=s=>document.querySelector(s), app=$('#app');
-let S={xp:0,best:0,mastery:{},srs:{},streak:0,lastDay:'',plan:null};
+let S={xp:0,best:0,bee:0,level:'G68',mastery:{},srs:{},streak:0,lastDay:'',plan:null};
 try{const r=localStorage.getItem('wordquest');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
 const save=()=>{try{localStorage.setItem('wordquest',JSON.stringify(S))}catch(e){}};
+let WORDS=BANK[S.level]||BANK.G68;
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
-const mastered=()=>Object.values(S.mastery).filter(v=>v>=3).length;
+const mastered=()=>WORDS.filter(w=>(S.mastery[w[0]]||0)>=3).length;
 const dstr=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
 const addDays=(s,n)=>{const [y,m,d]=s.split('-').map(Number);return dstr(new Date(y,m-1,d+n))};
 const GAP=[1,2,4,7,14,30];
-const wordOf=k=>WORDS.find(w=>w[0]===k);
+const wordOf=k=>ALL.find(w=>w[0]===k);
+const inLevel=k=>WORDS.some(w=>w[0]===k);
 function streakNow(){const t=dstr(new Date());return(S.lastDay===t||S.lastDay===addDays(t,-1))?S.streak:0}
 function stats(){$('#stats').innerHTML=`<span class="pill">🔥 ${streakNow()}</span><span class="pill">⭐ ${S.xp} XP</span><span class="pill">📚 ${mastered()}/${WORDS.length}</span>`}
 function plan(){const t=dstr(new Date());
-  if(!S.plan||S.plan.date!==t){
-    const due=Object.keys(S.srs).filter(k=>S.srs[k].due<=t).sort((a,b)=>S.srs[a].due<S.srs[b].due?-1:1).slice(0,8);
+  if(!S.plan||S.plan.date!==t||S.plan.level!==S.level){
+    const due=Object.keys(S.srs).filter(k=>S.srs[k].due<=t&&inLevel(k)).sort((a,b)=>S.srs[a].due<S.srs[b].due?-1:1).slice(0,8);
     const fresh=WORDS.map(w=>w[0]).filter(k=>!S.srs[k]).slice(0,5);
-    S.plan={date:t,due,fresh,done:false};save()}
+    S.plan={date:t,level:S.level,due,fresh,done:false};save()}
   return S.plan}
 function bump(w,ok){const k=w[0];S.mastery[k]=ok?Math.min(3,(S.mastery[k]||0)+1):Math.max(0,(S.mastery[k]||0)-1)}
+function setLevel(l){S.level=l;WORDS=BANK[l];save();menu()}
 function menu(){
   stats();const p=plan(),t=p.date;
   const tom=Object.values(S.srs).filter(v=>v.due<=addDays(t,1)).length;
-  app.innerHTML=`<div class="card daily"><h2 style="margin:0 0 6px">${p.done?'Today\'s practice is done ✅':'Today\'s practice'}</h2>
+  app.innerHTML=`<p class="hint" style="margin:0 0 6px">Grade level</p>
+  <div class="levels" role="group" aria-label="Grade level">${LV.map(([k,n])=>`<button class="lv ${S.level===k?'on':''}" onclick="setLevel('${k}')">${n}</button>`).join('')}</div>
+  <div class="card daily"><h2 style="margin:0 0 6px">${p.done?'Today\'s practice is done ✅':'Today\'s practice'}</h2>
   <p style="margin:0 0 14px">${p.done?`Come back tomorrow: ${tom} word${tom===1?'':'s'} will be ready to review.`:`<b>${p.fresh.length}</b> new word${p.fresh.length===1?'':'s'} to learn and <b>${p.due.length}</b> to review.`}</p>
   <button class="btn go" onclick="daily()">${p.done?'Do an extra round':'Start today\'s practice'}</button>
   <div class="dots">${WORDS.map(w=>`<span class="dot ${(S.mastery[w[0]]||0)>=3?'on':''}"></span>`).join('')}</div></div>
   <p class="sec">Extra practice</p>
   <div class="menu">
-  <button class="btn" onclick="learn()">📖 Flashcards<small>Browse all words with meanings and examples</small></button>
+  <button class="btn" onclick="bee()">🐝 Spelling Bee<small>Listen, then spell. One miss and you are out! Best: ${S.bee} rounds</small></button>
+  <button class="btn" onclick="learn()">📖 Flashcards<small>Browse all ${WORDS.length} words with meanings and examples</small></button>
   <button class="btn" onclick="quiz()">🎯 Meaning quiz<small>3 hearts, build a streak</small></button>
   <button class="btn" onclick="spell()">✏️ Spell it<small>Read the clue and type the word</small></button>
   <button class="btn alt" onclick="fill()">🧩 Fill the blank<small>Choose the word that fits the sentence</small></button>
@@ -136,7 +267,7 @@ function learn(){
   const draw=()=>{const w=deck[i];
     app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
     <div class="bar"><i style="width:${(i/deck.length)*100}%"></i></div>
-    <div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]}</p>
+    <div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]} <button class="spk" onclick="say('${w[0]}')" aria-label="Hear the word">🔊</button></p>
     ${shown?`<p class="def">${w[2]}</p><p class="ex">“${w[3]}”</p>`:`<p class="hint">Think of what it means, then flip the card.</p>`}</div>
     <div class="row">${shown?`<button class="btn go" id="n">${i<deck.length-1?'Next word':'Finish'}</button>`:`<button class="btn go" id="f">Flip card</button>`}</div>`;
     if(shown)$('#n').onclick=()=>{i++;shown=false;if(i>=deck.length){S.xp+=10;save();return done('Nice studying!','You reviewed all the words. +10 XP',learn)}draw()};
@@ -200,6 +331,36 @@ function spell(){
     $('#h').onclick=()=>{$('#m').style.color='var(--muted)';$('#m').textContent='Example: “'+w[3].replace(new RegExp(w[0].replace(/e$/,'')+'\\w*','i'),'_____')+'”'};
   };q();
 }
+/* BEE */
+function say(t){try{if(!('speechSynthesis' in window))return false;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u);return true}catch(e){return false}}
+function bee(){
+  const can='speechSynthesis' in window;
+  const deck=shuffle(WORDS).slice(0,15).sort((a,b)=>a[0].length-b[0].length);let i=0;
+  const mask=w=>w[3].replace(new RegExp(w[0].replace(/e$/,'')+'\\w*','i'),'_____');
+  const fin=(win,w)=>{if(i>S.bee)S.bee=i;S.xp+=i*5;save();
+    done(win?'Bee champion! 🏆':'Eliminated! 🐝',win?`You spelled all ${deck.length} words! +${i*5} XP`:`The word was ${w[0].toUpperCase().split('').join('-')}. You got through ${i} round${i===1?'':'s'}. +${i*5} XP`,bee)};
+  const q=()=>{
+    if(i>=deck.length)return fin(true);
+    const w=deck[i];let over=false;
+    app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
+    <p class="hint">Round ${i+1} of ${deck.length}. One miss and you are out!</p><div class="bar"><i style="width:${i/deck.length*100}%"></i></div>
+    <div class="card"><p class="pos">Listen to the judge, then spell the word.</p>
+    <div class="row"><button class="btn alt" id="b1" style="font-size:15px;padding:10px 4px">🔊 Word</button><button class="btn alt" id="b2" style="font-size:15px;padding:10px 4px">📖 Meaning</button><button class="btn alt" id="b3" style="font-size:15px;padding:10px 4px">💬 Sentence</button></div>
+    <p class="ex" id="clue" style="min-height:48px;margin:10px 0 0">${can?'Tap Word to hear it.':'This device cannot speak, so read the clues instead.'}</p>
+    <input type="text" id="t" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Type the spelling">
+    <p class="msg" id="m" role="status"></p></div><div id="nx"><button class="btn go" id="c">Spell it</button></div>`;
+    const clue=x=>$('#clue').textContent=x;
+    $('#b1').onclick=()=>{say(w[0]);if(!can)clue(`${w[1]}, ${w[0].length} letters, starts with “${w[0][0]}”`)};
+    $('#b2').onclick=()=>{say(w[2]);clue(w[2])};
+    $('#b3').onclick=()=>{say(w[3]);clue(mask(w))};
+    const inp=$('#t');inp.focus();if(can)setTimeout(()=>say(w[0]),300);
+    const check=()=>{if(over)return;const v=inp.value.trim().toLowerCase();if(!v)return;over=true;inp.disabled=true;
+      if(v===w[0]){bump(w,true);S.xp+=15;i++;save();stats();$('#m').style.color='var(--good)';$('#m').textContent='Correct!';
+        $('#nx').innerHTML=`<button class="btn go" id="nb">${i>=deck.length?'See results':'Next round'}</button>`;$('#nb').onclick=q;$('#nb').focus()}
+      else{bump(w,false);save();fin(false,w)}};
+    $('#c').onclick=check;inp.onkeydown=e=>{if(e.key==='Enter')check()};
+  };q();
+}
 /* DAILY */
 function daily(){const p=plan();
   if(p.done)return practice(p,true);
@@ -210,7 +371,7 @@ function learnNew(list,next){let i=0,shown=false;const t=dstr(new Date());
   const draw=()=>{const w=list[i];
     app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
     <p class="hint">New word ${i+1} of ${list.length}</p><div class="bar"><i style="width:${i/list.length*100}%"></i></div>
-    <div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]}</p>
+    <div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]} <button class="spk" onclick="say('${w[0]}')" aria-label="Hear the word">🔊</button></p>
     ${shown?`<p class="def">${w[2]}</p><p class="ex">“${w[3]}”</p>`:`<p class="hint">Say it out loud and guess what it means, then flip.</p>`}</div>
     <button class="btn go" id="b">${shown?(i<list.length-1?'Next word':'Start practice'):'Flip card'}</button>`;
     $('#b').onclick=()=>{if(!shown){shown=true;return draw()}
@@ -219,7 +380,7 @@ function learnNew(list,next){let i=0,shown=false;const t=dstr(new Date());
   draw()}
 function practice(p,again){
   const t=p.date;let keys=[...p.due,...p.fresh];
-  if(!keys.length)keys=shuffle(Object.keys(S.srs)).slice(0,8);
+  if(!keys.length)keys=shuffle(Object.keys(S.srs).filter(inLevel)).slice(0,8);
   if(!keys.length)return done('Nothing to practice yet','Learn a few words first.',menu);
   const q=shuffle(keys).map(k=>({k,first:true})),total=q.length;let fin=0,right=0,locked=false;
   const finish=()=>{let extra='';
