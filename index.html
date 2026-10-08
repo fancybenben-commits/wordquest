@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word Quest</title>
+<meta name="theme-color" content="#ffc93c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Word Quest">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff7e6;--card:#ffffff;--ink:#1d2b53;--muted:#5b6788;--accent:#ff6b4a;--good:#1fa97a;--bad:#d93d5a;--sun:#ffc93c;--line:#1d2b53;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a33;--card:#1f2748;--ink:#fff4dc;--muted:#a9b3d6;--accent:#ff8a6b;--good:#3fd3a0;--bad:#ff6b87;--sun:#ffc93c;--line:#fff4dc}}
+:root[data-theme="dark"]{--bg:#141a33;--card:#1f2748;--ink:#fff4dc;--muted:#a9b3d6;--accent:#ff8a6b;--good:#3fd3a0;--bad:#ff6b87;--sun:#ffc93c;--line:#fff4dc}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;font-size:17px;line-height:1.45;min-height:100vh}
+h1,h2,h3,.btn,.big{font-family:'Fredoka','Trebuchet MS',sans-serif}
+main{max-width:560px;margin:0 auto;padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
+.logo{font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;margin:0}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.pill{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:2px 12px;font-weight:700;font-size:15px}
+.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:20px;box-shadow:5px 5px 0 var(--line);margin-bottom:16px}
+.btn{display:block;width:100%;background:var(--sun);color:#1d2b53;border:3px solid var(--line);border-radius:16px;padding:12px 16px;font-size:19px;font-weight:600;cursor:pointer;box-shadow:3px 3px 0 var(--line);text-align:left}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.btn:focus-visible,input:focus-visible{outline:4px solid var(--accent);outline-offset:2px}
+.btn.alt{background:var(--card);color:var(--ink)}
+.btn.go{background:var(--accent);color:#fff;text-align:center}
+.btn.good{background:var(--good);color:#fff}
+.btn.bad{background:var(--bad);color:#fff}
+.btn:disabled{cursor:default}
+.menu{display:grid;gap:12px}
+.menu small{display:block;font-family:'Nunito',sans-serif;font-weight:400;font-size:14px;opacity:.85}
+.word{font-family:'Fredoka',sans-serif;font-size:40px;font-weight:700;margin:0;word-break:break-word}
+.pos{color:var(--muted);font-style:italic}
+.def{font-size:20px;margin:8px 0}
+.ex{color:var(--muted)}
+.row{display:flex;gap:10px}
+.row .btn{text-align:center}
+.bar{height:12px;border:2px solid var(--line);border-radius:99px;overflow:hidden;background:var(--card);margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--good);width:0;transition:width .3s}
+.opts{display:grid;gap:10px;margin-top:14px}
+input[type=text]{width:100%;font:inherit;font-size:22px;padding:12px;border:3px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);margin-top:12px}
+.msg{min-height:28px;font-weight:700;margin:10px 0 0}
+.big{font-size:56px;margin:0}
+.center{text-align:center}
+.back{background:none;border:none;color:var(--ink);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer;padding:6px 0}
+.hint{color:var(--muted);font-size:15px}
+.dots{display:flex;gap:4px;flex-wrap:wrap;margin-top:10px}
+.dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--card)}
+.dot.on{background:var(--good)}
+  .daily{background:var(--sun);color:#1d2b53}.daily .hint{color:#1d2b53}.daily .dot{background:#fff}.sec{font-family:'Fredoka',sans-serif;font-size:20px;margin:22px 0 10px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <h1 class="logo">Word Quest</h1>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div id="app"></div>
+</main>
+<script>
+const WORDS=[
+["abundant","adjective","Existing in large amounts; plentiful.","Fruit was abundant in the orchard this fall."],
+["reluctant","adjective","Unwilling and hesitant to do something.","Maya was reluctant to jump into the cold lake."],
+["generous","adjective","Willing to give more than is expected.","He was generous and shared his lunch with everyone."],
+["ancient","adjective","Very old; from a time long ago.","We toured the ancient ruins of a Roman city."],
+["fragile","adjective","Easily broken or damaged.","Pack the fragile glass vase carefully."],
+["curious","adjective","Eager to learn or know something.","The curious kitten explored every box."],
+["enormous","adjective","Extremely large.","An enormous whale rose out of the water."],
+["persistent","adjective","Continuing firmly despite difficulty.","Her persistent practice finally won her first chair."],
+["cautious","adjective","Careful to avoid danger or mistakes.","Be cautious when crossing the icy bridge."],
+["vivid","adjective","Bright, clear, and strongly felt.","She painted a vivid picture of the sunset."],
+["hesitate","verb","To pause before doing something because you are unsure.","Do not hesitate to ask for help."],
+["inspect","verb","To look at something closely and carefully.","The coach will inspect the field before the game."],
+["conserve","verb","To protect something from waste or loss.","We conserve water by taking shorter showers."],
+["collaborate","verb","To work together with others on a project.","Our class will collaborate on a science fair model."],
+["predict","verb","To say what you think will happen in the future.","Can you predict who will win the match?"],
+["analyze","verb","To study something in detail to understand it.","Scientists analyze data to find patterns."],
+["recall","verb","To remember something from the past.","I can recall every word of that poem."],
+["obstacle","noun","Something that blocks your way or makes progress hard.","A fallen tree was an obstacle on the trail."],
+["evidence","noun","Facts or signs that show something is true.","The footprints were evidence that someone had passed by."],
+["habitat","noun","The natural home of a plant or animal.","The wetland is a habitat for frogs and herons."],
+["theory","noun","An idea that explains something, based on observation.","Darwin's theory explained how species change."],
+["rival","noun","A person or team you compete against.","The two schools are friendly rivals."],
+["voyage","noun","A long journey, especially by sea or in space.","The voyage across the ocean took two weeks."],
+["tradition","noun","A custom passed down over many years.","Baking bread together is a family tradition."],
+["bewildered","adjective","Very confused; puzzled.","The bewildered tourist studied the subway map."],
+["eloquent","adjective","Able to speak or write clearly and powerfully.","Her eloquent speech moved the crowd."]
+];
+const $=s=>document.querySelector(s), app=$('#app');
+let S={xp:0,best:0,mastery:{},srs:{},streak:0,lastDay:'',plan:null};
+try{const r=localStorage.getItem('wordquest');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem('wordquest',JSON.stringify(S))}catch(e){}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const mastered=()=>Object.values(S.mastery).filter(v=>v>=3).length;
+const dstr=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0')};
+const addDays=(s,n)=>{const [y,m,d]=s.split('-').map(Number);return dstr(new Date(y,m-1,d+n))};
+const GAP=[1,2,4,7,14,30];
+const wordOf=k=>WORDS.find(w=>w[0]===k);
+function streakNow(){const t=dstr(new Date());return(S.lastDay===t||S.lastDay===addDays(t,-1))?S.streak:0}
+function stats(){$('#stats').innerHTML=`<span class="pill">🔥 ${streakNow()}</span><span class="pill">⭐ ${S.xp} XP</span><span class="pill">📚 ${mastered()}/${WORDS.length}</span>`}
+function plan(){const t=dstr(new Date());
+  if(!S.plan||S.plan.date!==t){
+    const due=Object.keys(S.srs).filter(k=>S.srs[k].due<=t).sort((a,b)=>S.srs[a].due<S.srs[b].due?-1:1).slice(0,8);
+    const fresh=WORDS.map(w=>w[0]).filter(k=>!S.srs[k]).slice(0,5);
+    S.plan={date:t,due,fresh,done:false};save()}
+  return S.plan}
+function bump(w,ok){const k=w[0];S.mastery[k]=ok?Math.min(3,(S.mastery[k]||0)+1):Math.max(0,(S.mastery[k]||0)-1)}
+function menu(){
+  stats();const p=plan(),t=p.date;
+  const tom=Object.values(S.srs).filter(v=>v.due<=addDays(t,1)).length;
+  app.innerHTML=`<div class="card daily"><h2 style="margin:0 0 6px">${p.done?'Today\'s practice is done ✅':'Today\'s practice'}</h2>
+  <p style="margin:0 0 14px">${p.done?`Come back tomorrow: ${tom} word${tom===1?'':'s'} will be ready to review.`:`<b>${p.fresh.length}</b> new word${p.fresh.length===1?'':'s'} to learn and <b>${p.due.length}</b> to review.`}</p>
+  <button class="btn go" onclick="daily()">${p.done?'Do an extra round':'Start today\'s practice'}</button>
+  <div class="dots">${WORDS.map(w=>`<span class="dot ${(S.mastery[w[0]]||0)>=3?'on':''}"></span>`).join('')}</div></div>
+  <p class="sec">Extra practice</p>
+  <div class="menu">
+  <button class="btn" onclick="learn()">📖 Flashcards<small>Browse all words with meanings and examples</small></button>
+  <button class="btn" onclick="quiz()">🎯 Meaning quiz<small>3 hearts, build a streak</small></button>
+  <button class="btn" onclick="spell()">✏️ Spell it<small>Read the clue and type the word</small></button>
+  <button class="btn alt" onclick="fill()">🧩 Fill the blank<small>Choose the word that fits the sentence</small></button>
+  </div>`;
+}
+/* LEARN */
+function learn(){
+  const deck=shuffle(WORDS);let i=0,shown=false;
+  const draw=()=>{const w=deck[i];
+    app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
+    <div class="bar"><i style="width:${(i/deck.length)*100}%"></i></div>
+    <div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]}</p>
+    ${shown?`<p class="def">${w[2]}</p><p class="ex">“${w[3]}”</p>`:`<p class="hint">Think of what it means, then flip the card.</p>`}</div>
+    <div class="row">${shown?`<button class="btn go" id="n">${i<deck.length-1?'Next word':'Finish'}</button>`:`<button class="btn go" id="f">Flip card</button>`}</div>`;
+    if(shown)$('#n').onclick=()=>{i++;shown=false;if(i>=deck.length){S.xp+=10;save();return done('Nice studying!','You reviewed all the words. +10 XP',learn)}draw()};
+    else $('#f').onclick=()=>{shown=true;draw()};
+  };draw();
+}
+/* QUIZ + FILL (multiple choice) */
+function mc(kind){
+  const deck=shuffle(WORDS);let i=0,hearts=3,streak=0,score=0,locked=false;
+  const q=()=>{
+    if(hearts<=0||i>=deck.length)return end();
+    locked=false;const w=deck[i];
+    let prompt,correct,choices;
+    if(kind==='quiz'){prompt=`<p class="word">${w[0]}</p><p class="pos">${w[1]}</p><p class="hint">What does it mean?</p>`;
+      correct=w[2];choices=shuffle([w,...shuffle(WORDS.filter(x=>x!==w&&x[1]===w[1])).slice(0,3)]).map(x=>x[2]);}
+    else{const blank=w[3].replace(new RegExp(w[0].replace(/e$/,'')+'\\w*','i'),'_____');
+      prompt=`<p class="def" style="font-size:22px">“${blank}”</p><p class="hint">Which word fits the blank?</p>`;
+      correct=w[0];choices=shuffle([w,...shuffle(WORDS.filter(x=>x!==w&&x[1]===w[1])).slice(0,3)]).map(x=>x[0]);}
+    app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
+    <div class="stats" style="margin-bottom:10px"><span class="pill">${'❤️'.repeat(hearts)||'💔'}</span><span class="pill">🔥 ${streak}</span><span class="pill">Score ${score}</span></div>
+    <div class="bar"><i style="width:${(i/deck.length)*100}%"></i></div>
+    <div class="card">${prompt}<div class="opts" id="o"></div><p class="msg" id="m" role="status"></p></div><div id="nx"></div>`;
+    choices.forEach(c=>{const b=document.createElement('button');b.className='btn alt';b.textContent=c;
+      b.onclick=()=>{if(locked)return;locked=true;const ok=c===correct;
+        [...$('#o').children].forEach(x=>{x.disabled=true;if(x.textContent===correct)x.className='btn good'});
+        if(!ok)b.className='btn bad';
+        bump(w,ok);
+        if(ok){streak++;score+=10+Math.min(streak,5)*2;S.xp+=10;$('#m').textContent=streak>2?`Correct! 🔥 ${streak} in a row`:'Correct!'}
+        else{hearts--;streak=0;$('#m').textContent=kind==='quiz'?'Not quite. Study the green answer.':`Not quite. The word was “${w[0]}”.`}
+        save();stats();
+        $('#nx').innerHTML=`<button class="btn go" id="nb">${(hearts<=0||i>=deck.length-1)?'See results':'Next'}</button>`;
+        $('#nb').onclick=()=>{i++;q()};$('#nb').focus();};
+      $('#o').appendChild(b)});
+  };
+  const end=()=>{const win=hearts>0;if(score>S.best)S.best=score;S.xp+=score>0?5:0;save();
+    done(win?'You cleared the deck! 🏆':'Out of hearts 💔',`Score: ${score}. Best: ${S.best}.`,()=>mc(kind))};
+  q();
+}
+const quiz=()=>mc('quiz'),fill=()=>mc('fill');
+/* SPELL */
+function spell(){
+  const deck=shuffle(WORDS).slice(0,10);let i=0,score=0,tries=0;
+  const q=()=>{
+    if(i>=deck.length){S.xp+=5;save();return done('Spelling round done!',`You spelled ${score} of ${deck.length} on the first try. +5 XP`,spell)}
+    const w=deck[i];tries=0;
+    app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
+    <div class="bar"><i style="width:${(i/deck.length)*100}%"></i></div>
+    <div class="card"><p class="pos">${w[1]} · ${w[0].length} letters · starts with “${w[0][0]}”</p>
+    <p class="def">${w[2]}</p>
+    <input type="text" id="t" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Type the word">
+    <p class="msg" id="m" role="status"></p></div>
+    <div class="row"><button class="btn alt" id="h">Hint</button><button class="btn go" id="c">Check</button></div>`;
+    const t=$('#t');t.focus();
+    const check=()=>{const v=t.value.trim().toLowerCase();if(!v)return;
+      if(v===w[0]){if(tries===0){score++;S.xp+=10}else S.xp+=3;bump(w,tries===0);save();stats();
+        $('#m').style.color='var(--good)';$('#m').textContent='Yes! '+w[3];$('#c').textContent='Next';
+        $('#c').onclick=()=>{i++;q()};$('#h').style.display='none';t.disabled=true;$('#c').focus()}
+      else{tries++;bump(w,false);$('#m').style.color='var(--bad)';
+        $('#m').textContent=tries>=3?`The word is “${w[0]}”. Type it to move on.`:'Not yet. Check the spelling and try again.';t.select()}};
+    $('#c').onclick=check;t.onkeydown=e=>{if(e.key==='Enter')($('#c').textContent==='Next'?(i++,q()):check())};
+    $('#h').onclick=()=>{$('#m').style.color='var(--muted)';$('#m').textContent='Example: “'+w[3].replace(new RegExp(w[0].replace(/e$/,'')+'\\w*','i'),'_____')+'”'};
+  };q();
+}
+/* DAILY */
+function daily(){const p=plan();
+  if(p.done)return practice(p,true);
+  const nw=p.fresh.filter(k=>!S.srs[k]).map(wordOf);
+  if(nw.length)return learnNew(nw,()=>practice(p,false));
+  practice(p,false)}
+function learnNew(list,next){let i=0,shown=false;const t=dstr(new Date());
+  const draw=()=>{const w=list[i];
+    app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
+    <p class="hint">New word ${i+1} of ${list.length}</p><div class="bar"><i style="width:${i/list.length*100}%"></i></div>
+    <div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]}</p>
+    ${shown?`<p class="def">${w[2]}</p><p class="ex">“${w[3]}”</p>`:`<p class="hint">Say it out loud and guess what it means, then flip.</p>`}</div>
+    <button class="btn go" id="b">${shown?(i<list.length-1?'Next word':'Start practice'):'Flip card'}</button>`;
+    $('#b').onclick=()=>{if(!shown){shown=true;return draw()}
+      if(!S.srs[w[0]])S.srs[w[0]]={box:0,due:t};save();
+      i++;shown=false;if(i>=list.length)return next();draw()};};
+  draw()}
+function practice(p,again){
+  const t=p.date;let keys=[...p.due,...p.fresh];
+  if(!keys.length)keys=shuffle(Object.keys(S.srs)).slice(0,8);
+  if(!keys.length)return done('Nothing to practice yet','Learn a few words first.',menu);
+  const q=shuffle(keys).map(k=>({k,first:true})),total=q.length;let fin=0,right=0,locked=false;
+  const finish=()=>{let extra='';
+    if(!again){const y=addDays(t,-1);
+      if(S.lastDay!==t){S.streak=S.lastDay===y?S.streak+1:1;S.xp+=20;extra=' +20 XP daily bonus.'}
+      S.lastDay=t;p.done=true;save()}
+    stats();done(again?'Extra round done!':'Daily practice complete! 🔥',`You got ${right} of ${total} right on the first try.${extra}${again?'':` Streak: ${S.streak} day${S.streak===1?'':'s'}.`}`,menu)};
+  const step=()=>{
+    if(!q.length)return finish();
+    const it=q.shift(),w=wordOf(it.k),b=(S.srs[it.k]||{box:0}).box;locked=false;
+    const head=`<button class="back" onclick="menu()">← Menu</button><p class="hint">${again?'Extra round':'Daily practice'}: ${fin} of ${total} done</p><div class="bar"><i style="width:${fin/total*100}%"></i></div>`;
+    const after=(ok,msg)=>{if(locked)return;locked=true;
+      if(it.first){bump(w,ok);if(ok)right++;fin++;
+        if(!again){const nb=ok?Math.min(5,b+1):0;S.srs[it.k]={box:nb,due:addDays(t,GAP[nb])}}}
+      if(ok)S.xp+=it.first?10:2;else q.push({k:it.k,first:false});
+      save();stats();$('#m').textContent=msg;
+      $('#nx').innerHTML=`<button class="btn go" id="nb">${(q.length||false)?'Next':'See results'}</button>`;
+      $('#nb').onclick=step;$('#nb').focus()};
+    if(b<2){
+      const ch=shuffle([w,...shuffle(WORDS.filter(x=>x!==w&&x[1]===w[1])).slice(0,3)]).map(x=>x[2]);
+      app.innerHTML=head+`<div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]}</p><p class="hint">What does it mean?</p><div class="opts" id="o"></div><p class="msg" id="m" role="status"></p></div><div id="nx"></div>`;
+      ch.forEach(c=>{const bt=document.createElement('button');bt.className='btn alt';bt.textContent=c;
+        bt.onclick=()=>{if(locked)return;const ok=c===w[2];
+          [...$('#o').children].forEach(x=>{x.disabled=true;if(x.textContent===w[2])x.className='btn good'});
+          if(!ok)bt.className='btn bad';
+          after(ok,ok?'Correct!':'Not quite. We will ask this one again.')};
+        $('#o').appendChild(bt)});
+    }else{
+      app.innerHTML=head+`<div class="card"><p class="pos">${w[1]} · ${w[0].length} letters · starts with “${w[0][0]}”</p><p class="def">${w[2]}</p>
+      <input type="text" id="t" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Type the word">
+      <p class="msg" id="m" role="status"></p></div><div id="nx"><button class="btn go" id="c">Check</button></div>`;
+      const inp=$('#t');inp.focus();
+      const check=()=>{const v=inp.value.trim().toLowerCase();if(!v||locked)return;const ok=v===w[0];inp.disabled=true;
+        after(ok,ok?'Correct! '+w[3]:`The word is “${w[0]}”. We will ask again.`)};
+      $('#c').onclick=check;inp.onkeydown=e=>{if(e.key==='Enter')check()};
+    }
+  };
+  step()}
+function done(title,text,again){
+  stats();
+  app.innerHTML=`<div class="card center"><p class="big">🎉</p><h2 style="margin:6px 0">${title}</h2><p>${text}</p></div>
+  <div class="menu">${again===menu?'':'<button class="btn go" id="a">Play again</button>'}<button class="btn alt" onclick="menu()">Back to menu</button></div>`;
+  if(again!==menu)$('#a').onclick=again;
+}
+menu();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})})}
+</script>
+</body>
+</html>
