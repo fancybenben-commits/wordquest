@@ -11,7 +11,6 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#fff7e6;--card:#ffffff;--ink:#1d2b53;--muted:#5b6788;--accent:#ff6b4a;--good:#1fa97a;--bad:#d93d5a;--sun:#ffc93c;--line:#1d2b53;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -23,9 +22,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-
 h1,h2,h3,.btn,.big{font-family:'Fredoka','Trebuchet MS',sans-serif}
 main{max-width:560px;margin:0 auto;padding:16px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
-.logo{font-family:'Fredoka',sans-serif;font-weight:700;font-size:26px;margin:0}
-.stats{display:flex;gap:8px;flex-wrap:wrap}
-.pill{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:2px 12px;font-weight:700;font-size:15px}
+.logo{font-family:'Fredoka',sans-serif;font-weight:700;font-size:22px;margin:0;white-space:nowrap}
+.stats{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill{background:var(--card);border:2px solid var(--line);border-radius:999px;padding:2px 9px;font-weight:700;font-size:14px;white-space:nowrap}
 .card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:20px;box-shadow:5px 5px 0 var(--line);margin-bottom:16px}
 .btn{display:block;width:100%;background:var(--sun);color:#1d2b53;border:3px solid var(--line);border-radius:16px;padding:12px 16px;font-size:19px;font-weight:600;cursor:pointer;box-shadow:3px 3px 0 var(--line);text-align:left}
 .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
@@ -56,7 +55,9 @@ input[type=text]{width:100%;font:inherit;font-size:22px;padding:12px;border:3px 
 .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:var(--card)}
 .dot.on{background:var(--good)}
   .daily{background:var(--sun);color:#1d2b53}.daily .hint{color:#1d2b53}.daily .dot{background:#fff}.sec{font-family:'Fredoka',sans-serif;font-size:20px;margin:22px 0 10px}
-.levels{display:flex;gap:8px;margin-bottom:14px}.lv{flex:1;font-family:'Fredoka',sans-serif;font-size:17px;font-weight:600;padding:8px 0;border:3px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);cursor:pointer}.lv.on{background:var(--accent);color:#fff}.spk{border:2px solid var(--line);background:var(--sun);border-radius:99px;font-size:16px;padding:2px 10px;cursor:pointer;margin-left:6px}
+.levels{display:flex;gap:6px;margin-bottom:14px}.lv{flex:1;min-width:0;font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600;padding:8px 0;border:3px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);cursor:pointer}.lv.on{background:var(--accent);color:#fff}.spk{border:2px solid var(--line);background:var(--sun);border-radius:99px;font-size:16px;padding:2px 10px;cursor:pointer;margin-left:6px}
+.foot{text-align:center;margin:18px 0 6px;font-size:14px}.foot a{color:var(--muted)}
+textarea,select{width:100%;font:inherit;font-size:18px;padding:10px;border:3px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);margin-top:10px}textarea{min-height:64px;resize:vertical}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -219,12 +220,196 @@ clandestine|a|Done in secret.|They held a clandestine meeting at midnight.
 inevitable|a|Certain to happen.|Rain seemed inevitable under those dark clouds.
 resilient|a|Able to recover quickly from trouble.|Resilient children bounce back from setbacks.
 pretentious|a|Trying to seem more important than you are.|The pretentious menu used needlessly fancy words.`)};
-const ALL=Object.values(BANK).flat();
-const LV=[['K2','K–2'],['G35','3–5'],['G68','6–8'],['G912','9–12']];
+BANK.K2.push(...P(`balloon|n|A rubber bag filled with air or gas.|The red balloon floated up to the ceiling.
+blanket|n|A soft cover that keeps you warm.|I snuggled under my blanket.
+button|n|A small round thing that holds clothes closed.|My shirt is missing a button.
+castle|n|A big stone building where kings and queens lived.|The knight rode to the castle.
+circus|n|A show with clowns, animals, and acrobats.|We watched a clown at the circus.
+cookie|n|A small, sweet, flat cake.|Mom baked a chocolate cookie for me.
+dinosaur|n|A huge reptile that lived long ago.|The museum has a dinosaur skeleton.
+feather|n|One of the light, soft parts that cover a bird.|A blue feather fell from the sky.
+forest|n|A large area covered with trees.|Deer live in the forest.
+ladder|n|A set of steps used for climbing up high.|Dad climbed the ladder to fix the roof.
+monster|n|A scary imaginary creature.|The monster in the story was actually friendly.
+ocean|n|A very large body of salt water.|Whales swim in the ocean.
+parade|n|A line of people walking or riding to celebrate something.|We waved flags at the parade.
+picnic|n|A meal eaten outdoors.|Let us have a picnic at the park.
+puppet|n|A toy that you move with your hand or strings.|The puppet danced on the stage.
+sandwich|n|Two slices of bread with food in between.|I ate a cheese sandwich for lunch.
+bounce|v|To spring back after hitting a surface.|The ball will bounce off the wall.
+build|v|To make something by putting parts together.|Let us build a tower out of blocks.
+catch|v|To grab something that is moving through the air.|Can you catch the ball?
+draw|v|To make a picture with a pencil or crayon.|I like to draw animals.
+hide|v|To go where no one can see you.|The kitten likes to hide under the bed.
+kick|v|To hit something with your foot.|Kick the ball into the goal.
+paint|v|To put color on something with a brush.|We paint pictures in art class.
+plant|v|To put seeds or young plants in the ground.|We plant beans in spring.
+splash|v|To make water fly around.|The kids splash in the puddles.
+sneeze|v|To blow air out of your nose suddenly.|Pepper makes me sneeze.
+stretch|v|To make your body or something longer.|Stretch your arms up high.
+wave|v|To move your hand back and forth to say hello.|I wave to my neighbor every morning.
+soft|a|Not hard; nice to touch.|The kitten's fur is soft.
+loud|a|Making a lot of noise.|The thunder was very loud.
+fast|a|Moving quickly.|A cheetah is a fast runner.
+slow|a|Not moving quickly.|The turtle is slow.
+wet|a|Covered with water.|My socks are wet.
+dirty|a|Not clean.|His boots were dirty from the mud.
+warm|a|A little bit hot; not cold.|The soup is warm.
+shiny|a|Bright and reflecting light.|She wore a shiny silver ring.
+silly|a|Funny in a goofy way.|The silly clown wore giant shoes.
+strong|a|Having great power.|The strong wind blew my hat away.
+lonely|a|Sad because you are alone.|The lonely bird sat on the wire.
+messy|a|Not neat or tidy.|My room is messy.`));
+BANK.G35.push(...P(`advantage|n|Something that helps you do better than others.|Being tall is an advantage in basketball.
+athlete|n|A person who is good at sports.|The athlete trained every morning.
+calendar|n|A chart showing the days, weeks, and months of a year.|Circle the date on the calendar.
+courage|n|The strength to face something scary or hard.|It took courage to speak in front of the class.
+dictionary|n|A book that explains the meanings of words.|Look up the word in the dictionary.
+earthquake|n|A sudden shaking of the ground.|The earthquake rattled the dishes.
+electricity|n|A kind of energy that powers lights and machines.|Wires carry electricity into our homes.
+environment|n|The natural world around us.|We should keep our environment clean.
+festival|n|A special celebration with music, food, or events.|The town holds a music festival each summer.
+gravity|n|The force that pulls things toward the earth.|Gravity makes apples fall from trees.
+instrument|n|A tool for playing music or measuring something.|She plays the violin, a beautiful instrument.
+landscape|n|The scenery you can see across an area of land.|The landscape was covered in fresh snow.
+magnet|n|A piece of metal that pulls iron toward it.|A magnet stuck to the refrigerator door.
+muscle|n|Body tissue that helps you move.|Lifting weights builds muscle.
+planet|n|A large round object that circles a star.|Earth is the third planet from the sun.
+pollution|n|Harmful materials that dirty the air, water, or land.|Pollution made the river unsafe to swim in.
+rainforest|n|A thick forest in a place with heavy rain.|Monkeys and parrots live in the rainforest.
+souvenir|n|Something you keep to remember a trip.|I bought a seashell souvenir at the beach.
+volcano|n|A mountain that can shoot out hot melted rock.|Smoke rose from the volcano.
+arrange|v|To put things in a certain order.|Arrange the books by size.
+attach|v|To fasten one thing to another.|Attach the photo to the email.
+collect|v|To gather things together.|I collect stamps from different countries.
+compare|v|To look at how things are alike or different.|Compare the two pictures carefully.
+decorate|v|To make something look nicer by adding things.|We decorate the tree with lights.
+deliver|v|To bring something to a person or place.|The mail carrier will deliver the package.
+describe|v|To tell what something is like.|Describe your favorite place to visit.
+escape|v|To get away from a place or danger.|The rabbit tried to escape from the cage.
+examine|v|To look at something closely.|The doctor will examine my throat.
+exchange|v|To give one thing and get another.|Let us exchange cards on Friday.
+gather|v|To come together or collect.|Students gather in the gym for assembly.
+interrupt|v|To break in while someone is speaking.|Please do not interrupt your teacher.
+invite|v|To ask someone to come to an event.|I will invite my cousins to my party.
+perform|v|To do a show or play for an audience.|The band will perform on Saturday.
+recycle|v|To use materials again to make new things.|We recycle paper and cans.
+annual|a|Happening once every year.|The annual fair comes to town each fall.
+brilliant|a|Very bright or very smart.|She had a brilliant idea for the project.
+crowded|a|Filled with too many people or things.|The crowded bus was hard to board.
+flexible|a|Able to bend easily without breaking.|A rubber band is flexible.
+frequent|a|Happening often.|We make frequent trips to the library.
+honest|a|Telling the truth; not cheating.|An honest person returns lost money.
+jealous|a|Unhappy because someone has something you want.|He felt jealous of his friend's new bike.
+patient|a|Able to wait calmly.|Be patient while the cake bakes.
+precious|a|Very valuable or loved.|The ring was precious to her grandmother.
+tropical|a|Having to do with hot, wet regions near the equator.|Bananas grow in tropical climates.`));
+BANK.G68.push(...P(`alliteration|n|The repeating of the same first sound in nearby words.|The tongue twister uses alliteration to repeat the P sound.
+bias|n|An unfair preference for or against something.|The judge was removed because of bias.
+boundary|n|A line that marks the edge of an area.|A fence marks the boundary of the yard.
+citizen|n|A person who legally belongs to a country.|Every citizen has the right to vote.
+conflict|n|A serious disagreement or struggle.|The main conflict in the story is a feud between neighbors.
+constitution|n|The basic laws that set up a government.|The Constitution protects free speech.
+controversy|n|A public argument about something people disagree on.|The new rule caused controversy at school.
+diversity|n|A variety of different people or things.|Our school celebrates cultural diversity.
+empire|n|A group of lands ruled by one powerful leader.|The Roman Empire once stretched across Europe.
+erosion|n|The slow wearing away of rock or soil by wind and water.|Erosion carved the canyon over millions of years.
+fossil|n|The preserved remains of a plant or animal from long ago.|She found a fossil of a fern in the rock.
+inference|n|A conclusion based on clues and reasoning.|My inference was that the character felt scared.
+irony|n|When the result is the opposite of what you expect.|A fire station burning down is an irony.
+migration|n|Movement from one place to another, often with the seasons.|The migration of geese begins in autumn.
+monarchy|n|A government led by a king or queen.|Britain is a monarchy with a royal family.
+narrator|n|The person who tells a story.|The narrator describes the events in the first person.
+propaganda|n|Information used to push a cause, often one-sided.|Wartime posters were often propaganda.
+protagonist|n|The main character in a story.|The protagonist overcomes a big challenge.
+revolution|n|A sudden, big change, often in government.|The American Revolution began in 1775.
+simile|n|A comparison using the words like or as.|Quiet as a mouse is a simile.
+advocate|v|To publicly support an idea or cause.|Students advocate for cleaner parks.
+anticipate|v|To expect something and get ready for it.|We anticipate a big crowd at the game.
+cooperate|v|To work together toward a shared goal.|The class must cooperate to finish the mural.
+compromise|v|To settle a disagreement by each giving up something.|The two friends compromise on a movie.
+demonstrate|v|To show clearly how something works.|The scientist will demonstrate the experiment.
+distinguish|v|To tell the difference between things.|Can you distinguish a frog from a toad?
+emphasize|v|To give special importance to something.|Teachers emphasize reading every night.
+enforce|v|To make sure a rule or law is followed.|Referees enforce the rules of the game.
+evaluate|v|To judge how good or useful something is.|Evaluate each source for accuracy.
+exaggerate|v|To describe something as bigger or better than it is.|Do not exaggerate how fast you ran.
+investigate|v|To study something closely to learn the facts.|Detectives investigate the crime scene.
+justify|v|To give a good reason for something.|Justify your answer with evidence.
+migrate|v|To move from one region to another.|Monarch butterflies migrate to Mexico.
+navigate|v|To find your way, especially on a trip.|Sailors navigate by the stars.
+reinforce|v|To make something stronger.|Beams reinforce the old bridge.
+abstract|a|Existing as an idea, not as a physical thing.|Freedom is an abstract concept.
+accurate|a|Correct and exact.|Her measurements were accurate.
+adequate|a|Good enough for what is needed.|We have adequate supplies for the trip.
+ambitious|a|Eager to achieve success.|The ambitious student joined three clubs.
+authentic|a|Real and genuine, not fake.|This is an authentic Roman coin.
+essential|a|Absolutely necessary.|Water is essential for life.
+hostile|a|Unfriendly and aggressive.|The hostile crowd booed loudly.
+mandatory|a|Required by a rule or law.|Helmets are mandatory for bike riders here.
+obvious|a|Easy to see or understand.|The answer was obvious to everyone.
+optimistic|a|Expecting good things to happen.|She stayed optimistic despite the rain.
+relevant|a|Connected to the topic at hand.|Include only relevant facts in your report.
+significant|a|Important enough to notice.|The discovery was a significant step forward.
+turbulent|a|Rough, wild, and unsteady.|The plane shook in the turbulent air.
+versatile|a|Able to be used in many ways.|A versatile tool can do many jobs.
+vulnerable|a|Easy to hurt or attack.|Baby birds are vulnerable to hawks.`));
+BANK.G912.push(...P(`autonomy|n|The freedom to govern yourself or make your own choices.|The colony fought for autonomy from the empire.
+catharsis|n|A release of strong emotions that leaves you relieved.|Writing in her journal brought catharsis.
+cynicism|n|A belief that people act only out of selfish reasons.|His cynicism made him doubt every promise.
+dichotomy|n|A sharp division between two opposite things.|There is a dichotomy between what she says and what she does.
+epitome|n|A perfect example of something.|She is the epitome of kindness.
+fallacy|n|A mistaken belief based on faulty reasoning.|It is a fallacy that the earth is flat.
+hypocrisy|n|Pretending to have beliefs you do not actually follow.|Lecturing others about litter while littering is hypocrisy.
+idiosyncrasy|n|An odd habit or feature that is special to one person.|Her idiosyncrasy is wearing mismatched socks.
+jurisdiction|n|The official power to make legal decisions in an area.|The case is outside this court's jurisdiction.
+nostalgia|n|A wistful longing for the past.|Old photographs filled him with nostalgia.
+oligarchy|n|A government controlled by a small group of people.|The country became an oligarchy run by a few wealthy families.
+paradox|n|A statement that seems contradictory but may be true.|It is a paradox that you can feel lonely in a crowd.
+precedent|n|An earlier example used as a guide for later decisions.|The ruling set a precedent for future cases.
+prejudice|n|An unfair opinion formed without knowing the facts.|Education can help overcome prejudice.
+serendipity|n|A happy discovery made by chance.|Finding the old book was pure serendipity.
+vernacular|n|The everyday language of a particular region or group.|The poet wrote in the vernacular of her village.
+augment|v|To make something greater by adding to it.|She took a job to augment her income.
+corroborate|v|To confirm with additional evidence.|Two witnesses corroborate his story.
+deteriorate|v|To become worse over time.|The old bridge began to deteriorate.
+disseminate|v|To spread information widely.|Schools disseminate safety tips to families.
+elucidate|v|To make something clear by explaining it.|Could you elucidate your main point?
+emulate|v|To try to match or be like someone you admire.|Young players emulate their sports heroes.
+exonerate|v|To officially clear someone of blame.|The DNA test will exonerate the prisoner.
+expedite|v|To make a process happen faster.|Extra staff will expedite the repairs.
+fluctuate|v|To rise and fall unpredictably.|Prices fluctuate from week to week.
+inundate|v|To overwhelm with a large amount.|Fans inundate the singer with letters.
+obfuscate|v|To make something unclear or confusing on purpose.|Legal jargon can obfuscate the meaning.
+ostracize|v|To exclude someone from a group.|Do not ostracize a classmate for being different.
+rectify|v|To fix or correct a mistake.|The store will rectify the billing error.
+relinquish|v|To give up something, often unwillingly.|The king had to relinquish his throne.
+transcend|v|To go beyond the limits of something.|Great music can transcend language barriers.
+aesthetic|a|Having to do with beauty and art.|The garden was designed for aesthetic appeal.
+ambivalent|a|Having mixed feelings about something.|He felt ambivalent about moving away.
+arbitrary|a|Based on random choice rather than reason.|The rule seemed arbitrary and unfair.
+benevolent|a|Kind and generous.|The benevolent donor funded the new library.
+candid|a|Honest and direct, even if it is uncomfortable.|I appreciate your candid feedback.
+conspicuous|a|Easy to notice; standing out.|The bright orange hat was conspicuous in the crowd.
+eccentric|a|Odd or unconventional in behavior.|The eccentric inventor wore a cape to work.
+fastidious|a|Very careful about details and cleanliness.|The fastidious chef wiped the counter after every step.
+gregarious|a|Enjoying the company of others.|The gregarious host greeted every guest.
+impeccable|a|Perfect, with no flaws.|Her manners were impeccable.
+impartial|a|Fair; not favoring either side.|A judge must remain impartial.
+indignant|a|Angry because something seems unfair.|He was indignant at the false accusation.
+lethargic|a|Lacking energy; sluggish.|The heat made everyone feel lethargic.
+malicious|a|Intended to cause harm.|The malicious rumor hurt her feelings.
+melancholy|a|Sad in a thoughtful way.|A melancholy tune drifted from the piano.
+obsolete|a|No longer used because something better exists.|Floppy disks are obsolete.
+ominous|a|Suggesting that something bad will happen.|Ominous clouds gathered on the horizon.`));
+const ONLINE_LOOKUP=true; // set to false to remove the online dictionary lookup
+let ALL=Object.values(BANK).flat();
+const LV=[['K2','K–2'],['G35','3–5'],['G68','6–8'],['G912','9–12'],['MY','Mine']];
 const $=s=>document.querySelector(s), app=$('#app');
-let S={xp:0,best:0,bee:0,level:'G68',mastery:{},srs:{},streak:0,lastDay:'',plan:null};
+let S={xp:0,best:0,bee:0,level:'G68',custom:[],mastery:{},srs:{},streak:0,lastDay:'',plan:null};
 try{const r=localStorage.getItem('wordquest');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
 const save=()=>{try{localStorage.setItem('wordquest',JSON.stringify(S))}catch(e){}};
+const rebuild=()=>{if(!Array.isArray(S.custom))S.custom=[];BANK.MY=S.custom;ALL=Object.values(BANK).flat()};rebuild();
 let WORDS=BANK[S.level]||BANK.G68;
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const mastered=()=>WORDS.filter(w=>(S.mastery[w[0]]||0)>=3).length;
@@ -232,6 +417,7 @@ const dstr=d=>{const x=new Date(d);return x.getFullYear()+'-'+String(x.getMonth(
 const addDays=(s,n)=>{const [y,m,d]=s.split('-').map(Number);return dstr(new Date(y,m-1,d+n))};
 const GAP=[1,2,4,7,14,30];
 const wordOf=k=>ALL.find(w=>w[0]===k);
+const distract=w=>{let p=WORDS.filter(x=>x!==w&&x[1]===w[1]);if(p.length<3)p=p.concat(shuffle(ALL.filter(x=>x[1]===w[1]&&x[0]!==w[0]&&!p.includes(x))));return shuffle(p).slice(0,3)};
 const inLevel=k=>WORDS.some(w=>w[0]===k);
 function streakNow(){const t=dstr(new Date());return(S.lastDay===t||S.lastDay===addDays(t,-1))?S.streak:0}
 function stats(){$('#stats').innerHTML=`<span class="pill">🔥 ${streakNow()}</span><span class="pill">⭐ ${S.xp} XP</span><span class="pill">📚 ${mastered()}/${WORDS.length}</span>`}
@@ -259,10 +445,12 @@ function menu(){
   <button class="btn" onclick="quiz()">🎯 Meaning quiz<small>3 hearts, build a streak</small></button>
   <button class="btn" onclick="spell()">✏️ Spell it<small>Read the clue and type the word</small></button>
   <button class="btn alt" onclick="fill()">🧩 Fill the blank<small>Choose the word that fits the sentence</small></button>
-  </div>`;
+  <button class="btn alt" onclick="myWords()">✏️ Add my own words<small>Build a custom list${ONLINE_LOOKUP?' with dictionary lookup':''}</small></button>
+  </div>
+  <p class="foot"><a href="privacy.html">Privacy policy</a></p>`;
 }
 /* LEARN */
-function learn(){
+function learn(){if(!WORDS.length)return myWords();
   const deck=shuffle(WORDS);let i=0,shown=false;
   const draw=()=>{const w=deck[i];
     app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
@@ -275,17 +463,17 @@ function learn(){
   };draw();
 }
 /* QUIZ + FILL (multiple choice) */
-function mc(kind){
+function mc(kind){if(!WORDS.length)return myWords();
   const deck=shuffle(WORDS);let i=0,hearts=3,streak=0,score=0,locked=false;
   const q=()=>{
     if(hearts<=0||i>=deck.length)return end();
     locked=false;const w=deck[i];
     let prompt,correct,choices;
     if(kind==='quiz'){prompt=`<p class="word">${w[0]}</p><p class="pos">${w[1]}</p><p class="hint">What does it mean?</p>`;
-      correct=w[2];choices=shuffle([w,...shuffle(WORDS.filter(x=>x!==w&&x[1]===w[1])).slice(0,3)]).map(x=>x[2]);}
+      correct=w[2];choices=shuffle([w,...distract(w)]).map(x=>x[2]);}
     else{const blank=w[3].replace(new RegExp(w[0].replace(/e$/,'')+'\\w*','i'),'_____');
       prompt=`<p class="def" style="font-size:22px">“${blank}”</p><p class="hint">Which word fits the blank?</p>`;
-      correct=w[0];choices=shuffle([w,...shuffle(WORDS.filter(x=>x!==w&&x[1]===w[1])).slice(0,3)]).map(x=>x[0]);}
+      correct=w[0];choices=shuffle([w,...distract(w)]).map(x=>x[0]);}
     app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
     <div class="stats" style="margin-bottom:10px"><span class="pill">${'❤️'.repeat(hearts)||'💔'}</span><span class="pill">🔥 ${streak}</span><span class="pill">Score ${score}</span></div>
     <div class="bar"><i style="width:${(i/deck.length)*100}%"></i></div>
@@ -308,7 +496,7 @@ function mc(kind){
 }
 const quiz=()=>mc('quiz'),fill=()=>mc('fill');
 /* SPELL */
-function spell(){
+function spell(){if(!WORDS.length)return myWords();
   const deck=shuffle(WORDS).slice(0,10);let i=0,score=0,tries=0;
   const q=()=>{
     if(i>=deck.length){S.xp+=5;save();return done('Spelling round done!',`You spelled ${score} of ${deck.length} on the first try. +5 XP`,spell)}
@@ -331,9 +519,54 @@ function spell(){
     $('#h').onclick=()=>{$('#m').style.color='var(--muted)';$('#m').textContent='Example: “'+w[3].replace(new RegExp(w[0].replace(/e$/,'')+'\\w*','i'),'_____')+'”'};
   };q();
 }
+/* MY WORDS */
+const clean=t=>(t||'').replace(/[<>]/g,'').replace(/\s+/g,' ').trim();
+function delWord(i){const w=S.custom.splice(i,1)[0];if(w){delete S.srs[w[0]];delete S.mastery[w[0]]}rebuild();WORDS=BANK[S.level]||BANK.G68;save();myWords('Deleted.')}
+function myWords(msg){
+  const n=S.custom.length;
+  app.innerHTML=`<button class="back" onclick="menu()">← Menu</button>
+  <div class="card"><h2 style="margin:0 0 6px">Add your own words</h2>
+  <p class="hint" style="margin:0 0 4px">${ONLINE_LOOKUP?'Type a word and tap Look up to get its meaning from a free online dictionary. You can edit everything before saving.':'Type a word, its meaning, and an example sentence.'}</p>
+  <input type="text" id="mw" placeholder="Word" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="Word">
+  ${ONLINE_LOOKUP?'<button class="btn alt" id="lk" style="margin-top:10px">🔎 Look up meaning</button>':''}
+  <select id="mp" aria-label="Part of speech"><option>noun</option><option>verb</option><option>adjective</option><option>adverb</option></select>
+  <textarea id="md" placeholder="Meaning" aria-label="Meaning"></textarea>
+  <textarea id="me" placeholder="Example sentence that uses the word" aria-label="Example sentence"></textarea>
+  <p class="msg" id="mm" role="status">${msg||''}</p>
+  <button class="btn go" id="ad">Add word</button></div>
+  ${ONLINE_LOOKUP?'<p class="hint">Look up sends only the word you typed to dictionaryapi.dev. Nothing else is sent.</p>':''}
+  ${n?`<button class="btn" onclick="setLevel('MY');">Practice my ${n} word${n===1?'':'s'}</button>
+  <p class="sec">My words</p><div class="menu">${S.custom.map((w,i)=>`<div class="pill" style="border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:8px;white-space:normal"><span><b>${w[0]}</b> <i>${w[1]}</i></span><button class="back" onclick="delWord(${i})" aria-label="Delete ${w[0]}">Delete</button></div>`).join('')}</div>`:''}`;
+  const m=t=>{$('#mm').textContent=t},ok=w=>/^[a-z][a-z-]{1,29}$/.test(w);
+  if(ONLINE_LOOKUP)$('#lk').onclick=async()=>{
+    const w=$('#mw').value.trim().toLowerCase();
+    if(!ok(w))return m('Please type one English word (letters only).');
+    m('Looking it up…');
+    try{
+      const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),8000);
+      const r=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(w),{signal:ctl.signal});clearTimeout(to);
+      if(!r.ok)throw 0;const j=await r.json();
+      const ms=j.flatMap(e=>e.meanings||[]);
+      const mn=ms.find(x=>['noun','verb','adjective','adverb'].includes(x.partOfSpeech)&&x.definitions&&x.definitions.length);
+      if(!mn)throw 0;
+      const ex=(mn.definitions.find(x=>x.example)||{}).example||'';
+      $('#mp').value=mn.partOfSpeech;$('#md').value=clean(mn.definitions[0].definition);$('#me').value=clean(ex);
+      m(ex?'Found it! Check the text, then tap Add word.':'Found the meaning. Please write an example sentence that uses the word.');
+    }catch(e){m('Could not look that up. Check your internet connection and spelling, or type the meaning yourself.')}
+  };
+  $('#ad').onclick=()=>{
+    const w=$('#mw').value.trim().toLowerCase(),p=$('#mp').value,d=clean($('#md').value),e=clean($('#me').value);
+    if(!ok(w))return m('Please type one English word (letters only).');
+    if(d.length<3)return m('Please add a meaning.');
+    if(!new RegExp(w.replace(/e$/,'')+'\\w*','i').test(e))return m('Your example sentence needs to include the word.');
+    if(S.custom.length>=200)return m('You have reached 200 words. Delete some first.');
+    if(ALL.some(x=>x[0]===w))return m('That word is already in your lists.');
+    S.custom.push([w,p,d,e]);rebuild();WORDS=BANK[S.level]||BANK.G68;save();myWords('Added “'+w+'”!');
+  };
+}
 /* BEE */
 function say(t){try{if(!('speechSynthesis' in window))return false;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.85;speechSynthesis.speak(u);return true}catch(e){return false}}
-function bee(){
+function bee(){if(!WORDS.length)return myWords();
   const can='speechSynthesis' in window;
   const deck=shuffle(WORDS).slice(0,15).sort((a,b)=>a[0].length-b[0].length);let i=0;
   const mask=w=>w[3].replace(new RegExp(w[0].replace(/e$/,'')+'\\w*','i'),'_____');
@@ -362,7 +595,7 @@ function bee(){
   };q();
 }
 /* DAILY */
-function daily(){const p=plan();
+function daily(){if(!WORDS.length)return myWords();const p=plan();
   if(p.done)return practice(p,true);
   const nw=p.fresh.filter(k=>!S.srs[k]).map(wordOf);
   if(nw.length)return learnNew(nw,()=>practice(p,false));
@@ -400,7 +633,7 @@ function practice(p,again){
       $('#nx').innerHTML=`<button class="btn go" id="nb">${(q.length||false)?'Next':'See results'}</button>`;
       $('#nb').onclick=step;$('#nb').focus()};
     if(b<2){
-      const ch=shuffle([w,...shuffle(WORDS.filter(x=>x!==w&&x[1]===w[1])).slice(0,3)]).map(x=>x[2]);
+      const ch=shuffle([w,...distract(w)]).map(x=>x[2]);
       app.innerHTML=head+`<div class="card"><p class="word">${w[0]}</p><p class="pos">${w[1]}</p><p class="hint">What does it mean?</p><div class="opts" id="o"></div><p class="msg" id="m" role="status"></p></div><div id="nx"></div>`;
       ch.forEach(c=>{const bt=document.createElement('button');bt.className='btn alt';bt.textContent=c;
         bt.onclick=()=>{if(locked)return;const ok=c===w[2];
